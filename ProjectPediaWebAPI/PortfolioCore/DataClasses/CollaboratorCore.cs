@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.SqlServerCe;
 
 namespace ProjectPediaWebAPI.PortfolioCore
 {
@@ -31,7 +30,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
                 SqlCommand projCmd = DBConnection.CreateCommand();
                 projCmd.CommandText = "SELECT * FROM Collaborator WHERE PersonID = @personId";
 
-                projCmd.Parameters.Add(new SqlCeParameter
+                projCmd.Parameters.Add(new SqlParameter
                 {
                     ParameterName = "@personId",
                     Value = PersonID.ToUpper()
@@ -39,14 +38,8 @@ namespace ProjectPediaWebAPI.PortfolioCore
 
                 using (var reader = projCmd.ExecuteReader())
                 {
-                    if (!reader.HasRows)
+                    if (reader.HasRows && reader.Read())
                     {
-                        return DatabaseResultCode.notFound;
-                    }
-                    else
-                    {
-                        reader.Read();
-
                         Name = reader["name"].ToString();
                         PrimaryTitle = reader["primary_title"].ToString();
                         Biography = reader["biography"].ToString();
@@ -54,12 +47,16 @@ namespace ProjectPediaWebAPI.PortfolioCore
                         Contact_LinkedIn = reader["contact_linkedin"].ToString();
                         Contact_Twitter = reader["contact_linkedin"].ToString();
                         Contact_Website = reader["contact_linkedin"].ToString();
-
-                        ProjectList = BuildProjectList(DBConnection);
-
-                        return DatabaseResultCode.okay;
+                    }
+                    else
+                    {
+                        return DatabaseResultCode.notFound;
                     }
                 }
+
+                ProjectList = BuildProjectList(DBConnection);
+
+                return DatabaseResultCode.okay;
             }
             catch
             {
@@ -80,7 +77,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
             SqlCommand cmd = DBConnection.CreateCommand();
             cmd.CommandText = sqlCommandString;
 
-            cmd.Parameters.Add(new SqlCeParameter
+            cmd.Parameters.Add(new SqlParameter
             {
                 ParameterName = "@personId",
                 Value = PersonID

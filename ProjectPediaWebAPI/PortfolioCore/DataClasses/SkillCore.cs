@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.SqlServerCe;
 
 namespace ProjectPediaWebAPI.PortfolioCore
 {
@@ -22,7 +21,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
             try
             {
                 SqlCommand skillCmd = DBConnection.CreateCommand();
-                skillCmd.Parameters.Add(new SqlCeParameter
+                skillCmd.Parameters.Add(new SqlParameter
                 {
                     ParameterName = "@skillId",
                     Value = _identity.ToUpper()
@@ -31,21 +30,19 @@ namespace ProjectPediaWebAPI.PortfolioCore
 
                 using (var reader = skillCmd.ExecuteReader())
                 {
-                    if (!reader.HasRows)
+                    if (reader.HasRows && reader.Read())
                     {
-                        return DatabaseResultCode.notFound;
+                        SkillName = reader["skillname"].ToString();
                     }
                     else
                     {
-                        reader.Read();
-
-                        SkillName = reader["skillname"].ToString();
-
-                        ProjectList = BuildProjectList(DBConnection);
-
-                        return DatabaseResultCode.okay;
+                        return DatabaseResultCode.notFound;
                     }
                 }
+
+                ProjectList = BuildProjectList(DBConnection);
+
+                return DatabaseResultCode.okay;                        
             }
             catch
             {
@@ -59,7 +56,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
 
             SqlCommand cmd = DBConnection.CreateCommand();
 
-            cmd.Parameters.Add(new SqlCeParameter
+            cmd.Parameters.Add(new SqlParameter
             {
                 ParameterName = "@skillId",
                 Value = _identity

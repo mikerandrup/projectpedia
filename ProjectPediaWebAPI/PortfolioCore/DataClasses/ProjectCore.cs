@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Data.SqlServerCe;
 
 namespace ProjectPediaWebAPI.PortfolioCore
 {
@@ -26,7 +25,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
                 SqlCommand projCmd = DBConnection.CreateCommand();
                 projCmd.CommandText = "SELECT * FROM Project WHERE ProjectId = @identity";
 
-                projCmd.Parameters.Add(new SqlCeParameter
+                projCmd.Parameters.Add(new SqlParameter
                 {
                     ParameterName = "@identity",
                     Value = _identity.ToUpper()
@@ -34,25 +33,23 @@ namespace ProjectPediaWebAPI.PortfolioCore
 
                 using (var projReader = projCmd.ExecuteReader())
                 {
-                    if (!projReader.HasRows)
+                    if (projReader.HasRows && projReader.Read())
                     {
-                        return DatabaseResultCode.notFound;
-                    }
-                    else
-                    {
-                        projReader.Read();
-
                         Headline = projReader["headline"].ToString();
                         Byline = projReader["byline"].ToString();
                         Details = projReader["details"].ToString();
-
-                        CollaboratorList = BuildCollaboratorList(DBConnection);
-
-                        return DatabaseResultCode.okay;
+                    }
+                    else
+                    {
+                        return DatabaseResultCode.notFound;
                     }
                 }
+
+                CollaboratorList = BuildCollaboratorList(DBConnection);
+
+                return DatabaseResultCode.okay;
             }
-            catch
+            catch (Exception exc)
             {
                 return DatabaseResultCode.miscError;
             }
@@ -71,7 +68,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
             SqlCommand cmd = DBConnection.CreateCommand();
             cmd.CommandText = sqlCommandString;
 
-            cmd.Parameters.Add(new SqlCeParameter {
+            cmd.Parameters.Add(new SqlParameter {
                 ParameterName = "@identity",
                 Value = _identity
             });
