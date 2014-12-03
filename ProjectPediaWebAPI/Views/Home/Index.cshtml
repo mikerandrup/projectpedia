@@ -1,0 +1,94 @@
+﻿<form onsubmit="return false">
+<header>
+    <div class="content-wrapper">
+        <div class="float-left">
+            <p class="site-title">
+                <a href="~/">Portfolio API</a></p>
+        </div>
+    </div>
+</header>
+<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <input type="text" id="apiRequestInput" name="foo"/>
+            <div id="responseHolder">Type in an API route above or use the convenience links below...</div>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <h3>Welcome to Mike's ProjectPedia Web API:</h3>
+        <ol class="round">
+            <li class="one apiLink" data-apiuri="/project/">
+                <h5>Browse Project Data</h5>
+                Project List and Project Details with Collaborators.
+                <a>Start Exploring…</a>
+            </li>
+            <li class="two apiLink" data-apiuri="/collaborator/">
+                <h5>Browse Collaborator Data</h5>
+                Collaborators and their contributions to these projects.
+                <a>Start Exploring…</a>
+            </li>
+            <li class="three apiLink" data-apiuri="/skill/">
+                <h5>Browse Skill Data</h5>
+                Projects organized by the skillset of Mike's contributions.
+                <a>Start Exploring…</a>
+            </li>
+        </ol>
+    </section>
+</div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function (exports, API) { // hey look: an immediate function that returns the actual doc.ready function
+
+        'use strict';
+        
+        var lastProcessedHashFragment = null,
+            
+        startupFunction = function () {
+            methods.attachElements();
+            methods.attachEvents();
+            API.init();
+            var initialRoute = methods.captureHashFragment();
+            if (initialRoute)
+                API.retrieveDataFromRelativeUri(initialRoute);
+        },
+
+        elements = {
+            uriFieldJq: null,
+        },
+
+        callbacks = {
+            handleApiLinkClick: function (evt) {
+                var chosenEl = evt.currentTarget,
+                    apiUri = chosenEl.getAttribute("data-apiuri");
+
+                elements.uriFieldJq.val(apiUri);
+                elements.uriFieldJq.trigger("change");
+            },
+
+            handleInputFieldChange: function (evt) {
+                var relApiUri = evt.currentTarget.value;
+                window.location.hash = relApiUri;
+                API.retrieveDataFromRelativeUri(relApiUri);
+            }
+        },
+
+        methods = {
+            attachElements: function () {
+                elements.uriFieldJq = $("#apiRequestInput");
+            },
+
+            attachEvents: function () {
+                $(window).on("click", ".apiLink", callbacks.handleApiLinkClick);
+                elements.uriFieldJq.on("change", callbacks.handleInputFieldChange);
+            },
+
+            captureHashFragment: function () {
+                var hashFragment = window.location.hash.substring(1) || false;
+                return hashFragment;
+            },
+        };
+
+        return startupFunction();
+
+    }(this, this.APIBrowser));
+</script>
