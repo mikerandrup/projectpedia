@@ -6,11 +6,11 @@ namespace ProjectPediaWebAPI.PortfolioCore
         protected string _identity;
 
         protected string _apiRoot = "/api/";
-        protected string _apiBasePath;
+        protected string _resourcePath;
         public string detailUri
         {
             get { 
-                return (_apiRoot + _apiBasePath + _identity).ToLower();
+                return (_apiRoot + _resourcePath + _identity).ToLower();
             }
         }
     }

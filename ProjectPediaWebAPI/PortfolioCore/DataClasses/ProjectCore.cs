@@ -9,7 +9,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
         public Project_FullItem(string projectId)
         {
             _identity = projectId;
-            _apiBasePath = "project/";
+            _resourcePath = "project/";
         }
 
         public string Headline { get; set; }
@@ -137,7 +137,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
         public Project_ListItem(string projectId)
         {
             _identity = projectId;
-            base._apiBasePath = "project/";
+            base._resourcePath = "project/";
         }
 
         public Project_ListItem(string projectId, string headline, string byline)

@@ -143,7 +143,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
         public Collaborator_ListItem(string personId)
         {
             _identity = personId.ToUpper();
-            _apiBasePath = "collaborator/";
+            _resourcePath = "collaborator/";
         }
 
         public string Name { get; set; }

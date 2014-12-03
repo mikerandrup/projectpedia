@@ -8,7 +8,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
         public Skill_FullItem(string skillId)
         {
             _identity = skillId;
-            _apiBasePath = "skill/";
+            _resourcePath = "skill/";
         }
 
         public string SkillName { get; set; }
@@ -126,7 +126,7 @@ namespace ProjectPediaWebAPI.PortfolioCore
         public Skill_ListItem(string skillId)
         {
             _identity = skillId;
-            _apiBasePath = "skill/";
+            _resourcePath = "skill/";
         }
         private string SkillID { get; set; }
         public string SkillName { get; set; }
