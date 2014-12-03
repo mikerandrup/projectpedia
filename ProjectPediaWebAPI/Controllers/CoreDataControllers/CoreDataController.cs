@@ -7,6 +7,7 @@ namespace ProjectPediaWebAPI.Controllers
 {
     public class CoreDataController : DatabaseController
     {
+        [AllowCrossOrigin]
         public ActionResult FetchData(string coreModuleName, string id)
         {
             bool useListMode = String.IsNullOrEmpty(id);

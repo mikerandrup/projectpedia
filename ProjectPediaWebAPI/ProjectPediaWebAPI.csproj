@@ -137,6 +137,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CoreDataControllers\AllowCrossOriginAttribute.cs" />
     <Compile Include="Controllers\CoreDataControllers\CoreDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CoreDataControllers\_DatabaseController.cs" />
