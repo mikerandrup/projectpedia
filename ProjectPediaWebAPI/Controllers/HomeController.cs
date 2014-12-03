@@ -8,7 +8,7 @@ namespace ProjectPediaWebAPI.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Browse()
         {
             return View("~/Views/Home/Index.cshtml");
         }
